@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     SITE IDENTITY — rename in ONE place when you buy your domain:
+     search this file for "FreeTubeTools" and "freetubetools.com" (also used in
+     the JSON-LD blocks below and the footer).
+     ═══════════════════════════════════════════════════════════════════ -->
+<title>Free YouTube Transcript Generator — Instant, No Sign-Up | FreeTubeTools</title>
+<meta name="description" content="Paste any YouTube link and get the full video transcript instantly — read it, copy it, or download it as a .txt file. Free, no account, no video upload needed.">
+<link rel="canonical" href="https://freetubetools.com/">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;📝&lt;/text&gt;&lt;/svg&gt;">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free YouTube Transcript Generator — Instant, No Sign-Up">
+<meta property="og:description" content="Paste any YouTube link and get the full transcript to read, copy, or download. Free, no account needed.">
+<meta property="og:url" content="https://freetubetools.com/">
+<meta property="og:site_name" content="FreeTubeTools">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free YouTube Transcript Generator — Instant, No Sign-Up">
+<meta name="twitter:description" content="Paste any YouTube link and get the full transcript to read, copy, or download. Free, no account needed.">
+
+<!-- JSON-LD: the tool itself -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Free YouTube Transcript Generator",
+  "url": "https://freetubetools.com/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Paste any YouTube link and get the full video transcript instantly — read, copy, or download it as text. Free and no account required."
+}
+</script>
+
+<!-- JSON-LD: FAQ schema (mirrors the on-page FAQ accordion exactly) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the difference between a transcript, subtitles, and closed captions?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A transcript is the full text of everything spoken in a video, presented as a document you can read, search, copy, or download. Subtitles are timed text shown on screen, usually translations for viewers who don't speak the video's language. Closed captions (CC) are also timed on-screen text, but include sound cues like [music] or [applause] for viewers who can't hear the audio. This tool takes a video's caption data and turns it into a clean, readable transcript." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this YouTube transcript generator really free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — completely free, with no hidden limits, trials, or paywalls. Paste a link, get the transcript. The site is supported by ads, so heavy use costs you nothing." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a YouTube or Google account to use it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You don't need to sign in, create an account, or install anything. The tool only needs the public video URL — nothing about you." }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate are the transcripts?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It depends on the source captions. If the creator uploaded their own captions, the transcript is usually near-perfect. If the video only has YouTube's auto-generated captions, expect very good but not flawless accuracy — occasional misheard words, especially with heavy accents, background music, or technical jargon. A quick proofread fixes most issues." }
+    },
+    {
+      "@type": "Question",
+      "name": "What languages are supported?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Any language the video has captions in. If a video has caption tracks in multiple languages, the tool fetches English by default when available, otherwise the video's original language. Auto-generated captions exist for dozens of languages, including Spanish, Portuguese, French, German, Hindi, Japanese, and more." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I download the transcript?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Once the transcript appears, click Download .txt to save it as a plain-text file, or click Copy to put the whole thing on your clipboard. You can also toggle timestamps on or off before copying or downloading." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a video sometimes have no transcript?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A few reasons: the uploader disabled captions entirely; the video is too new and YouTube hasn't finished auto-generating captions yet; the video is private, age-restricted, or region-locked; or it's a music-only video where auto-captioning was skipped. If captions don't exist on YouTube's side, no tool can extract them." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it legal to use YouTube transcripts?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Getting a transcript for personal use — studying, note-taking, research, accessibility — is generally fine. The video's content still belongs to its creator, so if you plan to republish a transcript or build content from it, quote responsibly, add your own value, and credit the source." }
+    }
+  ]
+}
+</script>
+
+<style>
+/* ═══ Design tokens ══════════════════════════════════════════════════ */
+:root {
+  --bg-top: #0d0b1f;
+  --bg-bottom: #1a1035;
+  --panel: rgba(148, 120, 255, 0.055);
+  --panel-solid: #171130;
+  --edge: rgba(168, 85, 247, 0.22);
+  --edge-bright: rgba(196, 130, 255, 0.45);
+  --ink: #ece9f8;
+  --ink-dim: #a89fc8;
+  --ink-faint: #6f668f;
+  --pink: #ff5e9a;
+  --purple: #a855f7;
+  --blue: #4f7cff;
+  --grad: linear-gradient(93deg, var(--pink) 0%, var(--purple) 48%, var(--blue) 100%);
+  --glow: 0 0 0 1px var(--edge), 0 8px 40px -12px rgba(168, 85, 247, 0.35);
+  --radius: 18px;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: linear-gradient(175deg, var(--bg-top) 0%, var(--bg-bottom) 100%) fixed;
+  min-height: 100vh;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Soft ambient orbs behind everything, for depth without images */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(600px 420px at 82% -6%, rgba(79, 124, 255, 0.14), transparent 65%),
+    radial-gradient(700px 480px at 8% 22%, rgba(255, 94, 154, 0.09), transparent 65%),
+    radial-gradient(520px 520px at 60% 78%, rgba(168, 85, 247, 0.10), transparent 65%);
+}
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.6vw, 2.35rem);
+  line-height: 1.22;
+  letter-spacing: 0.2px;
+}
+
+a { color: #c4b0ff; text-decoration: none; }
+a:hover { color: #e0d4ff; }
+
+/* ═══ Header ═════════════════════════════════════════════════════════ */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 0 8px;
+}
+.brand {
+  font-family: var(--serif); font-size: 1.18rem; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: 9px;
+}
+.brand .dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--grad); box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+}
+nav.top { display: flex; gap: 26px; font-size: 0.93rem; }
+nav.top a { color: var(--ink-dim); transition: color .18s ease; }
+nav.top a:hover { color: var(--ink); }
+
+/* ═══ Hero ═══════════════════════════════════════════════════════════ */
+.hero { text-align: center; padding: 66px 0 22px; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.3rem, 6vw, 3.9rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.3px;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  padding-bottom: 6px;
+}
+.hero .sub {
+  margin-top: 14px;
+  font-size: clamp(1.02rem, 2.2vw, 1.22rem);
+  color: var(--ink-dim);
+}
+
+/* The input + button — mobile-first: stacked, then row on wider screens */
+.getter { max-width: 680px; margin: 36px auto 0; }
+.getter-row { display: flex; flex-direction: column; gap: 12px; }
+.getter input {
+  width: 100%;
+  font: inherit; font-size: 1rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  padding: 16px 18px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .25s ease, background .2s ease;
+}
+.getter input::placeholder { color: var(--ink-faint); }
+.getter input:focus {
+  border-color: var(--edge-bright);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.14);
+}
+.btn-primary {
+  font: inherit; font-size: 1.02rem; font-weight: 600;
+  color: #fff; cursor: pointer;
+  background: var(--grad);
+  background-size: 160% 100%;
+  border: none; border-radius: 14px;
+  padding: 16px 30px;
+  white-space: nowrap;
+  transition: background-position .35s ease, transform .18s ease, box-shadow .25s ease;
+  box-shadow: 0 6px 24px -8px rgba(168, 85, 247, 0.65);
+}
+.btn-primary:hover {
+  background-position: 90% 0;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -8px rgba(168, 85, 247, 0.8);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary[disabled] { opacity: 0.65; cursor: wait; transform: none; }
+.no-catch { margin-top: 14px; font-size: 0.88rem; color: var(--ink-faint); }
+
+@media (min-width: 620px) {
+  .getter-row { flex-direction: row; }
+  .getter input { flex: 1; }
+}
+
+/* ═══ Results panel ══════════════════════════════════════════════════ */
+.results {
+  max-width: 820px; margin: 34px auto 0;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--glow);
+  overflow: hidden;
+  text-align: left;
+}
+.results[hidden] { display: none; }
+.results-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.14);
+}
+.results-title {
+  flex: 1 1 240px; min-width: 0;
+  font-weight: 600; font-size: 1.02rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chip {
+  font: inherit; font-size: 0.86rem; font-weight: 600;
+  color: var(--ink-dim); cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  padding: 7px 15px;
+  transition: color .18s ease, border-color .18s ease, background .18s ease, transform .15s ease;
+}
+.chip:hover { color: var(--ink); border-color: var(--edge-bright); transform: translateY(-1px); }
+.chip.on {
+  color: #fff; background: var(--grad); border-color: transparent;
+}
+.chip[disabled] { opacity: 0.55; cursor: wait; }
+.lang-select {
+  font: inherit; font-size: 0.86rem; font-weight: 600;
+  color: var(--ink-dim); cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  padding: 7px 12px;
+}
+.summary-box {
+  margin: 0 22px 18px;
+  padding: 16px 18px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid var(--edge-bright);
+  border-radius: 12px;
+  font-size: 0.93rem; color: var(--ink);
+  white-space: pre-wrap; line-height: 1.7;
+}
+.summary-box .label {
+  display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--purple); margin-bottom: 8px;
+}
+.transcript {
+  max-height: 420px; overflow-y: auto;
+  padding: 20px 22px 24px;
+  font-size: 0.97rem; line-height: 1.85;
+  color: var(--ink);
+  white-space: pre-wrap; word-wrap: break-word;
+}
+.transcript .ts {
+  color: var(--purple); font-family: var(--mono); font-size: 0.82em;
+  opacity: 0.85; margin-right: 8px;
+}
+.transcript::-webkit-scrollbar { width: 10px; }
+.transcript::-webkit-scrollbar-thumb { background: rgba(168,85,247,.35); border-radius: 5px; }
+
+/* Loading skeleton — shimmering fake text lines */
+.skeleton { padding: 24px 22px; }
+.skel-line {
+  height: 13px; border-radius: 7px; margin-bottom: 15px;
+  background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(196,130,255,.14) 50%, rgba(255,255,255,.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+.skel-line:nth-child(2) { width: 92%; }
+.skel-line:nth-child(3) { width: 78%; }
+.skel-line:nth-child(4) { width: 86%; }
+.skel-line:nth-child(5) { width: 60%; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.load-note { padding: 0 22px 20px; color: var(--ink-dim); font-size: 0.9rem; }
+
+/* Error card */
+.error-card { padding: 26px 24px; }
+.error-card .oops { font-size: 1.5rem; margin-bottom: 6px; }
+.error-card p { color: var(--ink-dim); max-width: 56ch; }
+.error-card p strong { color: var(--ink); }
+
+/* ═══ Ad slots — reserved-height so layout never jumps ═══════════════ */
+.ad-slot {
+  max-width: 820px; margin: 44px auto;
+  min-height: 100px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px dashed rgba(168, 85, 247, 0.16);
+  border-radius: 12px;
+  color: transparent; /* the placeholder label is invisible to visitors */
+  font-size: 0.75rem;
+}
+
+/* ═══ Sections ═══════════════════════════════════════════════════════ */
+section { padding: 58px 0; }
+.kicker {
+  display: inline-block; font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 2.2px; text-transform: uppercase;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  margin-bottom: 12px;
+}
+
+/* How-to: sticky intro on the left, numbered step cards on the right */
+.howto { display: grid; grid-template-columns: 1fr; gap: 34px; }
+.howto-intro p { color: var(--ink-dim); margin: 16px 0 24px; max-width: 40ch; }
+.howto-sticky { position: static; }
+.btn-ghost {
+  display: inline-block; font-weight: 600; font-size: 0.98rem;
+  color: var(--ink); cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--edge-bright);
+  border-radius: 12px; padding: 13px 26px;
+  transition: background .2s ease, box-shadow .25s ease, transform .18s ease;
+}
+.btn-ghost:hover {
+  color: #fff; background: rgba(168, 85, 247, 0.18);
+  box-shadow: 0 6px 22px -8px rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+}
+.steps { display: grid; gap: 20px; }
+.step-card {
+  display: flex; gap: 18px; align-items: flex-start;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  box-shadow: var(--glow);
+  padding: 24px 24px 22px;
+  transition: transform .22s ease, border-color .22s ease;
+}
+.step-card:hover { transform: translateY(-3px); border-color: var(--edge-bright); }
+.step-num {
+  flex-shrink: 0;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 0.95rem; color: #fff;
+  background: var(--grad);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.55);
+}
+.step-card h3 { font-size: 1.08rem; margin-bottom: 5px; }
+.step-card p { color: var(--ink-dim); font-size: 0.94rem; }
+.step-art { margin-top: 14px; opacity: 0.95; width: 100%; height: auto; }
+
+@media (min-width: 840px) {
+  .howto { grid-template-columns: 0.9fr 1.4fr; }
+  .howto-sticky { position: sticky; top: 40px; }
+}
+
+/* ═══ FAQ accordion ══════════════════════════════════════════════════ */
+.faq { max-width: 780px; }
+.faq details {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  margin-top: 12px;
+  overflow: hidden;
+  transition: border-color .2s ease;
+}
+.faq details[open] { border-color: var(--edge-bright); }
+.faq summary {
+  cursor: pointer; list-style: none;
+  padding: 17px 20px;
+  font-weight: 600; font-size: 1rem;
+  display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  transition: color .18s ease;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.35rem; font-weight: 400; line-height: 1;
+  color: var(--purple);
+  transition: transform .25s ease;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq .a { padding: 0 20px 18px; color: var(--ink-dim); font-size: 0.95rem; }
+
+/* ═══ Discover-more tool grid ════════════════════════════════════════ */
+.tool-grid {
+  display: grid; gap: 16px; margin-top: 26px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+.tool-card {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .25s ease;
+}
+.tool-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--edge-bright);
+  box-shadow: var(--glow);
+}
+.tool-card .icon { font-size: 1.7rem; }
+.tool-card h3 { color: var(--ink); font-size: 1.02rem; margin: 10px 0 4px; }
+.tool-card p { color: var(--ink-dim); font-size: 0.88rem; line-height: 1.5; }
+.tool-card .soon {
+  display: inline-block; margin-top: 12px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--purple);
+}
+
+/* ═══ Read more (blog teaser) ════════════════════════════════════════ */
+.post-card {
+  display: block; max-width: 640px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  padding: 26px 26px 24px;
+  margin-top: 26px;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .25s ease;
+}
+.post-card:hover { transform: translateY(-3px); border-color: var(--edge-bright); box-shadow: var(--glow); }
+.post-card .meta { font-size: 0.82rem; color: var(--ink-faint); margin-bottom: 8px; }
+.post-card h3 { color: var(--ink); font-family: var(--serif); font-size: 1.28rem; margin-bottom: 8px; }
+.post-card p { color: var(--ink-dim); font-size: 0.94rem; }
+.post-card .more { display: inline-block; margin-top: 14px; font-weight: 600; font-size: 0.9rem; }
+
+/* ═══ Footer ═════════════════════════════════════════════════════════ */
+footer {
+  border-top: 1px solid rgba(168, 85, 247, 0.14);
+  margin-top: 30px; padding: 36px 0 46px;
+  color: var(--ink-faint); font-size: 0.88rem;
+}
+.foot-row { display: flex; flex-wrap: wrap; gap: 18px; justify-content: space-between; align-items: center; }
+footer nav { display: flex; gap: 22px; }
+footer nav a { color: var(--ink-dim); }
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <a class="brand" href="/"><span class="dot"></span>FreeTubeTools</a>
+    <nav class="top">
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="/blog/">Blog</a>
+    </nav>
+  </header>
+
+  <!-- ═══ 1. Hero ═══ -->
+  <div class="hero">
+    <h1>Free YouTube Transcript Generator</h1>
+    <p class="sub">Instantly, without uploading video files.</p>
+
+    <div class="getter" id="top">
+      <form class="getter-row" id="transcript-form">
+        <input id="url-input" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+               placeholder="Paste a YouTube video link, e.g. https://youtube.com/watch?v=…"
+               aria-label="YouTube video URL">
+        <button class="btn-primary" id="go-btn" type="submit">Get Video Transcript</button>
+      </form>
+      <p class="no-catch">Quick and simple. No catch.</p>
+    </div>
+
+    <!-- ═══ Results panel: filled by JS, hidden until first use ═══ -->
+    <div class="results" id="results" hidden aria-live="polite"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ADSENSE SLOT 1 — below hero/results.
+       Paste your responsive AdSense unit code INSIDE this div.
+       Suggested unit: responsive display ad (auto size).
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot" id="ad-slot-1">ad slot 1</div>
+
+  <!-- ═══ 2. How-to: sticky intro + numbered step cards ═══ -->
+  <section id="how">
+    <div class="howto">
+      <div class="howto-intro">
+        <div class="howto-sticky">
+          <span class="kicker">Three steps</span>
+          <h2>How to get the transcript of a YouTube video</h2>
+          <p>No downloads, no browser extensions, no uploading video files. If the video has captions, you'll have its full text in seconds.</p>
+          <a class="btn-ghost" href="#top">Get started</a>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Copy the video's URL</h3>
+            <p>On YouTube, tap <em>Share</em> under the video (or copy the address bar). Any link format works — watch pages, youtu.be short links, even Shorts.</p>
+            <!-- Simple inline illustration: a browser bar holding a link -->
+            <svg class="step-art" viewBox="0 0 320 84" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A browser address bar containing a YouTube link">
+              <rect x="1" y="1" width="318" height="82" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(168,85,247,0.3)"/>
+              <circle cx="22" cy="20" r="4" fill="#ff5e9a"/><circle cx="36" cy="20" r="4" fill="#a855f7"/><circle cx="50" cy="20" r="4" fill="#4f7cff"/>
+              <rect x="14" y="38" width="292" height="30" rx="15" fill="rgba(255,255,255,0.05)" stroke="rgba(168,85,247,0.25)"/>
+              <text x="30" y="58" font-family="monospace" font-size="12" fill="#a89fc8">youtube.com/watch?v=dQw4…</text>
+              <rect x="252" y="43" width="46" height="20" rx="10" fill="url(#g1)"/>
+              <text x="261" y="57" font-family="sans-serif" font-size="10" fill="#fff">copy</text>
+              <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff5e9a"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Paste it in the box above</h3>
+            <p>Drop the link into the input at the top of this page and press <em>Get Video Transcript</em>. The transcript is fetched in a few seconds.</p>
+            <!-- Inline illustration: input with a blinking-style cursor and button -->
+            <svg class="step-art" viewBox="0 0 320 84" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A text input with a pasted link and a gradient button">
+              <rect x="1" y="22" width="212" height="40" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(168,85,247,0.35)"/>
+              <text x="16" y="47" font-family="monospace" font-size="12" fill="#ece9f8">youtu.be/dQw4w9WgXcQ</text>
+              <rect x="176" y="32" width="2" height="20" fill="#a855f7"/>
+              <rect x="224" y="22" width="95" height="40" rx="12" fill="url(#g2)"/>
+              <text x="242" y="47" font-family="sans-serif" font-size="12" fill="#fff">Get it →</text>
+              <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#4f7cff"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <h3>View &amp; download the transcript</h3>
+            <p>Read it right here, flip timestamps on or off, copy everything with one click, or download it as a .txt file for later.</p>
+            <!-- Inline illustration: a document with text lines and a download arrow -->
+            <svg class="step-art" viewBox="0 0 320 84" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A document of text with a download button">
+              <rect x="1" y="1" width="220" height="82" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(168,85,247,0.3)"/>
+              <rect x="16" y="16" width="150" height="8" rx="4" fill="rgba(196,130,255,0.4)"/>
+              <rect x="16" y="34" width="188" height="8" rx="4" fill="rgba(255,255,255,0.14)"/>
+              <rect x="16" y="52" width="170" height="8" rx="4" fill="rgba(255,255,255,0.14)"/>
+              <rect x="16" y="70" width="120" height="8" rx="4" fill="rgba(255,255,255,0.14)"/>
+              <circle cx="278" cy="42" r="26" fill="url(#g3)"/>
+              <path d="M278 30v18m0 0l-8-8m8 8l8-8" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff5e9a"/><stop offset="1" stop-color="#4f7cff"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ADSENSE SLOT 2 — mid-content, between how-to and FAQ.
+       Paste your responsive AdSense unit code INSIDE this div.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot" id="ad-slot-2">ad slot 2</div>
+
+  <!-- ═══ 3. FAQ accordion (mirrors the FAQPage JSON-LD in <head>) ═══ -->
+  <section id="faq">
+    <span class="kicker">Good to know</span>
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details>
+        <summary>What's the difference between a transcript, subtitles, and closed captions?</summary>
+        <div class="a">A <strong>transcript</strong> is the full text of everything spoken in a video, presented as a document you can read, search, copy, or download. <strong>Subtitles</strong> are timed text shown on screen, usually translations for viewers who don't speak the video's language. <strong>Closed captions</strong> (CC) are also timed on-screen text, but include sound cues like [music] or [applause] for viewers who can't hear the audio. This tool takes a video's caption data and turns it into a clean, readable transcript.</div>
+      </details>
+      <details>
+        <summary>Is this YouTube transcript generator really free?</summary>
+        <div class="a">Yes — completely free, with no hidden limits, trials, or paywalls. Paste a link, get the transcript. The site is supported by ads, so heavy use costs you nothing.</div>
+      </details>
+      <details>
+        <summary>Do I need a YouTube or Google account to use it?</summary>
+        <div class="a">No. You don't need to sign in, create an account, or install anything. The tool only needs the public video URL — nothing about you.</div>
+      </details>
+      <details>
+        <summary>How accurate are the transcripts?</summary>
+        <div class="a">It depends on the source captions. If the creator uploaded their own captions, the transcript is usually near-perfect. If the video only has YouTube's auto-generated captions, expect very good but not flawless accuracy — occasional misheard words, especially with heavy accents, background music, or technical jargon. A quick proofread fixes most issues.</div>
+      </details>
+      <details>
+        <summary>What languages are supported?</summary>
+        <div class="a">Any language the video has captions in. If a video has caption tracks in multiple languages, the tool fetches English by default when available, otherwise the video's original language. Auto-generated captions exist for dozens of languages, including Spanish, Portuguese, French, German, Hindi, Japanese, and more.</div>
+      </details>
+      <details>
+        <summary>Can I download the transcript?</summary>
+        <div class="a">Yes. Once the transcript appears, click <strong>Download .txt</strong> to save it as a plain-text file, or click <strong>Copy</strong> to put the whole thing on your clipboard. You can also toggle timestamps on or off before copying or downloading.</div>
+      </details>
+      <details>
+        <summary>Why does a video sometimes have no transcript?</summary>
+        <div class="a">A few reasons: the uploader disabled captions entirely; the video is too new and YouTube hasn't finished auto-generating captions yet; the video is private, age-restricted, or region-locked; or it's a music-only video where auto-captioning was skipped. If captions don't exist on YouTube's side, no tool can extract them.</div>
+      </details>
+      <details>
+        <summary>Is it legal to use YouTube transcripts?</summary>
+        <div class="a">Getting a transcript for personal use — studying, note-taking, research, accessibility — is generally fine. The video's content still belongs to its creator, so if you plan to republish a transcript or build content from it, quote responsibly, add your own value, and credit the source.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ═══ 4. Discover more: the internal-linking backbone.
+           The grid is rendered by JS from the TOOLS array below —
+           edit that array to add/point tools at real pages. ═══ -->
+  <section id="discover">
+    <span class="kicker">More free tools</span>
+    <h2>Discover more</h2>
+    <div class="tool-grid" id="tool-grid"></div>
+  </section>
+
+  <!-- ═══ 5. Read more: blog teaser ═══ -->
+  <section id="read">
+    <span class="kicker">From the blog</span>
+    <h2>Read more</h2>
+    <a class="post-card" href="/blog/turn-youtube-transcript-into-seo-article.html">
+      <div class="meta">Guide · 6 min read</div>
+      <h3>How to Turn a YouTube Transcript into an SEO Article</h3>
+      <p>A transcript is a first draft hiding in plain sight. Here's the exact workflow to turn one into a search-ranking article — cleaning, structuring, and optimizing it step by step.</p>
+      <span class="more">Read the guide →</span>
+    </a>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ADSENSE SLOT 3 — above footer.
+       Paste your responsive AdSense unit code INSIDE this div.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot" id="ad-slot-3">ad slot 3</div>
+
+  <footer>
+    <div class="foot-row">
+      <span>© <span id="year"></span> FreeTubeTools — free utilities, no catch.</span>
+      <nav>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+<script>
+'use strict';
+
+/* ═══ "Discover more" tool network — EDIT THIS ARRAY to add tools.
+       Set href to the tool's real path when it exists (e.g. "/word-counter/"). ═══ */
+const TOOLS = [
+  { icon: '🔤', name: 'Word Counter',       desc: 'Count words, characters, and reading time in any text.', href: '#' },
+  { icon: '🔳', name: 'QR Code Generator',  desc: 'Turn any link or text into a downloadable QR code.',      href: '#' },
+  { icon: '🖼️', name: 'Image Compressor',   desc: 'Shrink image file sizes without wrecking the quality.',   href: '#' },
+  { icon: '📄', name: 'PDF to Word',        desc: 'Convert PDF documents into editable Word files.',         href: '#' },
+  { icon: '💰', name: 'Loan Calculator',    desc: 'Work out monthly payments and total interest instantly.', href: '#' },
+  { icon: '🔑', name: 'Password Generator', desc: 'Create strong, random passwords you can actually trust.', href: '#' },
+];
+
+// Render the tool network grid from the TOOLS array
+function renderToolGrid() {
+  const grid = document.getElementById('tool-grid');
+  grid.innerHTML = TOOLS.map((t) => `
+    <a class="tool-card" href="${t.href}">
+      <span class="icon">${t.icon}</span>
+      <h3>${t.name}</h3>
+      <p>${t.desc}</p>
+      ${t.href === '#' ? '<span class="soon">Coming soon</span>' : ''}
+    </a>`).join('');
+}
+
+/* ═══ Transcript tool ═══ */
+
+// Parse the video ID out of any YouTube URL shape we might get
+// (watch?v=, youtu.be/, /shorts/, /embed/, /live/, extra params, bare ID)
+function extractVideoId(input) {
+  const trimmed = (input || '').trim();
+  const ID = /^[A-Za-z0-9_-]{11}$/;
+  if (ID.test(trimmed)) return trimmed;
+
+  let url;
+  try {
+    url = new URL(/^https?:\/\//i.test(trimmed) ? trimmed : 'https://' + trimmed);
+  } catch { return null; }
+
+  const host = url.hostname.replace(/^www\.|^m\./, '');
+  if (!/(^|\.)youtube\.com$|^youtu\.be$|^youtube-nocookie\.com$/.test(host)) return null;
+
+  if (host === 'youtu.be') {
+    const id = url.pathname.split('/')[1] || '';
+    return ID.test(id) ? id : null;
+  }
+  const v = url.searchParams.get('v');
+  if (v && ID.test(v)) return v;
+  const m = url.pathname.match(/^\/(?:shorts|embed|live|v)\/([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+// Format seconds as [MM:SS] or [H:MM:SS] for the timestamped view
+function formatTime(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+  const mm = String(m).padStart(2, '0'), rr = String(r).padStart(2, '0');
+  return h ? `${h}:${mm}:${rr}` : `${mm}:${rr}`;
+}
+
+// Languages offered in the Translate dropdown — must match api/translate.js SUPPORTED_LANGS
+const LANGUAGES = [
+  { code: 'en', label: 'English' }, { code: 'es', label: 'Spanish' }, { code: 'fr', label: 'French' },
+  { code: 'de', label: 'German' }, { code: 'pt', label: 'Portuguese' }, { code: 'it', label: 'Italian' },
+  { code: 'ar', label: 'Arabic' }, { code: 'hi', label: 'Hindi' }, { code: 'ur', label: 'Urdu' },
+  { code: 'ja', label: 'Japanese' }, { code: 'ko', label: 'Korean' }, { code: 'zh', label: 'Chinese' },
+  { code: 'ru', label: 'Russian' }, { code: 'tr', label: 'Turkish' }, { code: 'vi', label: 'Vietnamese' },
+  { code: 'id', label: 'Indonesian' }, { code: 'nl', label: 'Dutch' }, { code: 'pl', label: 'Polish' },
+];
+
+// State for the current transcript
+let current = null;          // { videoId, title, language, segments }
+let originalSegments = null; // kept so "translate" can be undone by re-rendering
+let showTimestamps = false;  // plain text vs with-timestamps toggle
+
+const form = document.getElementById('transcript-form');
+const input = document.getElementById('url-input');
+const goBtn = document.getElementById('go-btn');
+const results = document.getElementById('results');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const videoId = extractVideoId(input.value);
+  if (!videoId) {
+    renderError("That doesn't look like a YouTube link. Try pasting the full video URL — like <strong>youtube.com/watch?v=…</strong> or <strong>youtu.be/…</strong>");
+    return;
+  }
+
+  renderLoading();
+  goBtn.disabled = true;
+  goBtn.textContent = 'Fetching…';
+
+  try {
+    const resp = await fetch('/api/transcript?url=' + encodeURIComponent(videoId));
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      renderError(data.error || 'Something went wrong fetching this transcript. Please try again.');
+      return;
+    }
+    current = data;
+    originalSegments = data.segments; // remember the original language for "Show original"
+    renderTranscript();
+  } catch {
+    renderError("We couldn't reach the transcript service. Check your internet connection and try again.");
+  } finally {
+    goBtn.disabled = false;
+    goBtn.textContent = 'Get Video Transcript';
+  }
+});
+
+// Show the shimmer skeleton while fetching
+function renderLoading() {
+  results.hidden = false;
+  results.innerHTML = `
+    <div class="skeleton" role="status" aria-label="Fetching transcript">
+      <div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div>
+      <div class="skel-line"></div><div class="skel-line"></div>
+    </div>
+    <p class="load-note">Fetching the transcript… this usually takes a few seconds.</p>`;
+  results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Show a friendly error card (message may contain simple <strong> markup we wrote)
+function renderError(message) {
+  results.hidden = false;
+  results.innerHTML = `
+    <div class="error-card">
+      <div class="oops">😕 Hmm, that didn't work.</div>
+      <p>${message}</p>
+    </div>`;
+}
+
+// Render the fetched transcript with the toolbar (toggle / copy / download)
+function renderTranscript() {
+  results.hidden = false;
+  results.innerHTML = `
+    <div class="results-head">
+      <span class="results-title">${escapeHtml(current.title || 'Transcript')}</span>
+      <button class="chip" id="toggle-ts">${showTimestamps ? 'Plain text' : 'With timestamps'}</button>
+      <button class="chip" id="copy-btn">Copy</button>
+      <button class="chip" id="dl-btn">Download .txt</button>
+      <select class="lang-select" id="lang-select" aria-label="Translate to">
+        ${LANGUAGES.map((l) => `<option value="${l.code}">${l.label}</option>`).join('')}
+      </select>
+      <button class="chip" id="translate-btn">Translate</button>
+      <button class="chip" id="summarize-btn">Summarize</button>
+    </div>
+    <div id="summary-slot"></div>
+    <div class="transcript" id="transcript-body"></div>`;
+
+  paintBody();
+
+  document.getElementById('translate-btn').addEventListener('click', onTranslateClick);
+  document.getElementById('summarize-btn').addEventListener('click', onSummarizeClick);
+
+  document.getElementById('toggle-ts').addEventListener('click', () => {
+    showTimestamps = !showTimestamps;
+    document.getElementById('toggle-ts').textContent = showTimestamps ? 'Plain text' : 'With timestamps';
+    paintBody();
+  });
+
+  document.getElementById('copy-btn').addEventListener('click', async (e) => {
+    try {
+      await navigator.clipboard.writeText(buildText());
+      flashChip(e.target, 'Copied ✓');
+    } catch {
+      flashChip(e.target, 'Copy failed');
+    }
+  });
+
+  document.getElementById('dl-btn').addEventListener('click', () => {
+    // Name the file after the video title (safe characters only)
+    const name = (current.title || current.videoId).replace(/[^\w\- ]+/g, '').trim().slice(0, 60) || 'transcript';
+    const blob = new Blob([buildText()], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name + ' - transcript.txt';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  });
+}
+
+// Fill the transcript body in the current view mode
+function paintBody() {
+  const body = document.getElementById('transcript-body');
+  if (showTimestamps) {
+    body.innerHTML = current.segments
+      .map((s) => `<span class="ts">[${formatTime(s.start)}]</span>${escapeHtml(s.text)}`)
+      .join('\n');
+  } else {
+    body.textContent = current.segments.map((s) => s.text).join(' ');
+  }
+}
+
+// Build the plain-text version for copy/download, honoring the toggle
+function buildText() {
+  return showTimestamps
+    ? current.segments.map((s) => `[${formatTime(s.start)}] ${s.text}`).join('\n')
+    : current.segments.map((s) => s.text).join(' ');
+}
+
+// Briefly swap a chip's label to confirm an action
+function flashChip(btn, label) {
+  const old = btn.textContent;
+  btn.textContent = label;
+  btn.classList.add('on');
+  setTimeout(() => { btn.textContent = old; btn.classList.remove('on'); }, 1400);
+}
+
+// Translate the currently displayed transcript into the picked language.
+// A paid API call per click — never fires automatically.
+async function onTranslateClick(e) {
+  const btn = e.target;
+  const lang = document.getElementById('lang-select').value;
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Translating…';
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ segments: originalSegments, targetLang: lang }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      flashChip(btn, 'Failed');
+      renderInlineNotice(data.error || 'Translation failed. Please try again.');
+      return;
+    }
+    current = { ...current, language: data.language, segments: data.segments };
+    paintBody();
+    flashChip(document.getElementById('translate-btn'), 'Translated ✓');
+  } catch {
+    renderInlineNotice("We couldn't reach the translation service. Please try again.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+// Summarize the currently displayed transcript with Claude.
+// A paid API call per click — never fires automatically.
+async function onSummarizeClick(e) {
+  const btn = e.target;
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Summarizing…';
+  try {
+    const resp = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: current.segments.map((s) => s.text).join(' ') }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      renderInlineNotice(data.error || 'Summarizing failed. Please try again.');
+      return;
+    }
+    document.getElementById('summary-slot').innerHTML =
+      `<div class="summary-box"><span class="label">AI summary</span>${escapeHtml(data.summary)}</div>`;
+  } catch {
+    renderInlineNotice("We couldn't reach the summary service. Please try again.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+// Show a small non-blocking error message above the transcript body
+function renderInlineNotice(message) {
+  const slot = document.getElementById('summary-slot');
+  slot.innerHTML = `<div class="summary-box">😕 ${escapeHtml(message)}</div>`;
+}
+
+// Escape untrusted strings (video titles, caption text) before injecting as HTML
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+renderToolGrid();
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
