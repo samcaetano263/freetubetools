@@ -6,10 +6,14 @@ Last updated: 2026-08-19
 
 ## Current state
 
-Learnify is a **US Citizenship Test study app** (Android,
-header reads "2026 / US Citizenship Test / By Learnify").
-Its shared surface is now specified in `learnify/SPEC.md`,
-derived from 7 app screenshots.
+We are **cloning a third-party US Citizenship Test study
+app** (Android, "2026 / US Citizenship Test / By Learnify").
+Learnify is THEIR publisher name, not ours — see the naming
+collision in `learnify/REUSE.md`.
+
+The target's feature surface is mapped in `learnify/SPEC.md`,
+derived from 7 screenshots of their app. It is a reference,
+not our design — we can diverge.
 
 Repo is still `samcaetano263/freetubetools` — a YouTube
 transcript tool, unrelated to Learnify. Learnify material
@@ -28,7 +32,7 @@ transcribed them to Drive at
 The PNG originals are still only in that Claude Project.
 Repo rule is nothing binary, so they stay out.
 
-## Learnify: what's known
+## Target app: what's known
 
 - Nav: 5 bottom tabs — Tests, Flashcards, Handbook, Games, More
 - 8 flashcard decks, 1,478 cards visible
@@ -38,9 +42,12 @@ Repo rule is nothing binary, so they stay out.
 - Settings: dark mode, test version, state, Español
 
 See `learnify/SPEC.md` for the full surface and the
-implied data model.
+implied data model. See `learnify/REUSE.md` for what we
+can lift verbatim vs. what must be rewritten — their
+marketing copy and game names are theirs, the USCIS
+question bank is public domain.
 
-## Learnify: what's missing
+## Target app: what's missing
 
 No study content at all — zero questions, zero card
 fronts/backs, zero chapter text. Everything was locked
@@ -52,11 +59,13 @@ displays both years in different places.
 
 ## Next
 
-1. Sam: Learnify in this repo or a new one?
-2. Sam: 2008 or 2025 civics test?
-3. Then: ONE worker builds shared surface (nav, schema,
+1. Sam: pick a product name. "Learnify" is the app we
+   are cloning — cannot ship under it.
+2. Sam: own repo or this one?
+3. Sam: 2008 or 2025 civics test?
+4. Then: ONE worker builds shared surface (nav, schema,
    entitlement, settings) against fixture content.
-4. No parallel branches until 3 is merged.
+5. No parallel branches until 4 is merged.
 
 ## Blocked on Drive
 

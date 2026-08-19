@@ -1,13 +1,14 @@
-# Learnify — US Citizenship Test app
+# Reference app — US Citizenship Test
 
-Derived from 7 Android screenshots exported from the
-"immigration and naturalization questions" Claude Project
-via Drive. Source transcriptions in `screens/`.
+Derived from 7 Android screenshots of a **third-party app**
+we are cloning. Header reads "2026 / US Citizenship Test /
+By Learnify". Learnify is that app's publisher, not us.
 
-App header reads: **2026 / US Citizenship Test / By Learnify**
+Source transcriptions in `screens/`. Read `REUSE.md` before
+shipping anything from here — some of it is theirs.
 
-This is the product. The screenshots are the shared
-surface — nav, screens, and data model are all visible.
+This is a feature map of the target, not our design. Our
+build can diverge anywhere it's better.
 
 ## Navigation
 
@@ -120,3 +121,5 @@ List continues past capture.
 3. Español toggle — full bilingual bank, or UI only?
 4. Card/chapter/game content does not exist in the
    export. Must be sourced. See `CONTENT-GAP.md`.
+5. Deck/chapter counts are theirs. Ours need not match —
+   card counts are a content decision, not a spec.
