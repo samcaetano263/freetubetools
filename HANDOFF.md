@@ -6,53 +6,67 @@ Last updated: 2026-08-19
 
 ## Current state
 
-Repo is `samcaetano263/freetubetools` — a YouTube transcript
-tool. It is **not** Learnify. CLAUDE.md (added this session)
-describes Learnify conventions and points at the Learnify
-Drive folder. Unresolved: either Learnify gets its own repo,
-or this repo is being repurposed. Sam to decide.
+Learnify is a **US Citizenship Test study app** (Android,
+header reads "2026 / US Citizenship Test / By Learnify").
+Its shared surface is now specified in `learnify/SPEC.md`,
+derived from 7 app screenshots.
 
-Nothing Learnify-specific has been built.
+Repo is still `samcaetano263/freetubetools` — a YouTube
+transcript tool, unrelated to Learnify. Learnify material
+now lives in `learnify/` inside it. Unresolved: does
+Learnify get its own repo, or is this one being repurposed?
+Sam to decide. Nothing Learnify has been built yet.
 
-## What's here (freetubetools)
+## Where the material came from
 
-- `index.html` — entire tool in one file: markup, CSS, JS,
-  SEO/JSON-LD, ad slots. ~45KB.
-- `api/transcript.js` — caption fetch. Source picked from env
-  at runtime: TRANSCRIPT_API_KEY (Supadata) > PROXY_URL
-  (residential proxy) > ALLOW_DIRECT_FETCH (dev only).
-- `api/translate.js` (DeepL), `api/summarize.js` (Claude Haiku)
-  — optional, cost money per call.
-- `lib/ratelimit.js` — per-IP hourly limit + daily global spend
-  cap, Upstash Redis. Fails open if env vars unset.
-- `netlify/functions/transcript.js` — Netlify wrapper.
-- `blog/` — index + one post. Duplicates index.html's shell.
+Screenshots lived in a Claude.ai sidebar Project called
+"immigration and naturalization questions". That Project
+transcribed them to Drive at
+`_BRAIN_ROOT/01_ACTIVE_PROJECTS/Immigration_Naturalization`
+(8 Docs). Copied into `learnify/screens/` from there.
 
-Stack: vanilla HTML/CSS/JS, no framework, no build step.
-Node serverless (CommonJS). One dep: undici. Vercel or Netlify.
+The PNG originals are still only in that Claude Project.
+Repo rule is nothing binary, so they stay out.
 
-## Shared surface: NOT built
+## Learnify: what's known
 
-- Layout — monolithic index.html, not reusable. Second page
-  means copy-paste (blog already does this).
-- Navigation — hardcoded header, three links.
-- Data — none. No DB, no schema, no auth, no persisted state.
-  Transcript segments are request-scoped and discarded.
+- Nav: 5 bottom tabs — Tests, Flashcards, Handbook, Games, More
+- 8 flashcard decks, 1,478 cards visible
+- 8 handbook chapters, 3 free / 5 premium
+- 7 game modes, 3 test modes
+- Freemium: entitlement gates decks and chapters
+- Settings: dark mode, test version, state, Español
 
-Per CLAUDE.md "sequential before parallel": one worker builds
-layout + schema + auth alone before any fan-out.
+See `learnify/SPEC.md` for the full surface and the
+implied data model.
+
+## Learnify: what's missing
+
+No study content at all — zero questions, zero card
+fronts/backs, zero chapter text. Everything was locked
+behind the paywall at capture time. See
+`learnify/CONTENT-GAP.md`. Must be sourced from uscis.gov.
+
+Blocking decision: **2008 test or 2025 test?** The app
+displays both years in different places.
 
 ## Next
 
-1. Sam: confirm whether Learnify lives in this repo or a new one.
-2. Then: single worker on shared surface.
-3. No parallel branches until 2 is merged.
+1. Sam: Learnify in this repo or a new one?
+2. Sam: 2008 or 2025 civics test?
+3. Then: ONE worker builds shared surface (nav, schema,
+   entitlement, settings) against fixture content.
+4. No parallel branches until 3 is merged.
 
 ## Blocked on Drive
 
-(Nothing yet. Add items here when a task needs something from
-_BRAIN_ROOT/01_ACTIVE_PROJECTS/Learnify — Sam retrieves them.)
+Nothing. Drive is readable from these sessions — CLAUDE.md
+says otherwise and is wrong on that point. The Learnify
+Drive folder (`01_ACTIVE_PROJECTS/Learnify`) has three
+empty subfolders: 01_Source_Docs, 02_Assets,
+03_Screens_and_Reference.
 
 ## Branches
 
-- `claude/learnify-setup-2xjkx1` — CLAUDE.md, HANDOFF.md. Not merged.
+- `claude/learnify-setup-2xjkx1` — CLAUDE.md, HANDOFF.md,
+  learnify/. Not merged.
