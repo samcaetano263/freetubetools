@@ -52,13 +52,16 @@ word down to the em-dashes.
 - Their app store listing copy or screenshots
 - Any content pulled from behind their paywall
 
-## Naming collision — needs a decision
+## Naming — resolved
 
-Our project is currently called Learnify, in `CLAUDE.md`,
-in the Drive folder, and in this repo path. That is the
-name of the company publishing the app we are cloning.
+Our product is **CitizenPrep**. The project was briefly
+called Learnify, which is the publisher of the app we are
+cloning. Renamed 2026-08-19, before any code existed.
 
-Shipping under it invites a trademark problem, and it will
-quietly confuse every worker and every future session about
-which app is which. Rename early — it gets more expensive
-after the schema, the repo, and the store listing exist.
+Anywhere "Learnify" still appears in this folder, it refers
+to THEM — the reference app's publisher — and is correct as
+written. Do not sweep it. Their name appears in
+`screens/more.md` as verbatim transcription of their header.
+
+Trademark availability for "CitizenPrep" has not been
+checked. Do that before the store listing.

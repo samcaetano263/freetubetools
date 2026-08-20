@@ -1,9 +1,13 @@
-# Learnify
+# CitizenPrep
 
-Drive reference: _BRAIN_ROOT/01_ACTIVE_PROJECTS/Learnify
-(Sam's Google Drive. You cannot read it. If you need
-something from it, note it in HANDOFF.md under
-"Blocked on Drive" and Sam will retrieve it.)
+Drive reference: _BRAIN_ROOT/01_ACTIVE_PROJECTS/CitizenPrep
+(Sam's Google Drive. Readable from Claude Code sessions —
+search it directly. If a worker cannot reach it, note the
+item in HANDOFF.md under "Blocked on Drive".)
+
+We are cloning a third-party app. "Learnify" is THEIR
+publisher name — never ours. See citizenprep/REUSE.md
+for what is safe to reuse.
 
 ## Rules
 
