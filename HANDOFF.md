@@ -19,11 +19,40 @@ The target's feature surface is mapped in `citizenprep/SPEC.md`,
 derived from 7 screenshots of their app. It is a reference,
 not our design — we can diverge.
 
-Repo is still `samcaetano263/freetubetools` — a YouTube
-transcript tool, unrelated to CitizenPrep. Our material
-lives in `citizenprep/` inside it. Unresolved: does
-CitizenPrep get its own repo, or is this one being
-repurposed? Sam to decide. No code written yet.
+**Decided: CitizenPrep gets its own repo.**
+
+Right now the material still sits in `citizenprep/` inside
+`samcaetano263/freetubetools`, on the unmerged branch
+`claude/learnify-setup-2xjkx1`. freetubetools `main` is
+untouched — nothing here was ever merged, so that repo
+stays clean. This branch is a staging area, not a home.
+
+BLOCKED: this session cannot create the repo. The GitHub
+integration is scoped to freetubetools and returns 403 on
+repo creation. Sam must create `samcaetano263/citizenprep`
+himself, then a session can `add_repo` it and push.
+
+No code written yet.
+
+## Migration plan — do this once the repo exists
+
+Target layout in `samcaetano263/citizenprep`:
+
+    README.md              <- citizenprep/README.md
+    CLAUDE.md              <- root CLAUDE.md (already CitizenPrep)
+    HANDOFF.md             <- this file, minus this section
+    docs/SPEC.md           <- citizenprep/SPEC.md
+    docs/REUSE.md          <- citizenprep/REUSE.md
+    docs/TEST-VERSION.md   <- citizenprep/TEST-VERSION.md
+    docs/CONTENT-GAP.md    <- citizenprep/CONTENT-GAP.md
+    docs/screens/*.md      <- citizenprep/screens/*.md
+
+Fix relative links after the move — `SPEC.md` and
+`CONTENT-GAP.md` reference `TEST-VERSION.md` and
+`REUSE.md` as siblings, which still holds inside `docs/`.
+`README.md` already points at `docs/`.
+
+Then delete the freetubetools branch. Do not merge it.
 
 ## Where the material came from
 
@@ -73,7 +102,8 @@ needs another route or a drop into Drive.
 
 ## Next
 
-1. Sam: own repo or this one? Last open decision.
+1. Sam: create `samcaetano263/citizenprep` on GitHub
+   (private). Then a session migrates per the plan above.
 2. Get the official 128-question bank in (uscis.gov
    blocked here — Sam drops the PDF in Drive, or a worker
    fetches it from an unblocked environment).
