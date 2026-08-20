@@ -98,9 +98,10 @@ List continues past capture.
 ## Data model implied
 
 - **Question** — the atom. Feeds tests, flashcards, and
-  every game mode. Needs: topic, state-specific flag,
-  EN/ES text, true/false form (Balloon Pop), vocabulary
-  flag (Word Forge), figure/clue form (Who Am I?).
+  every game mode. Needs: **test version (2008 / 2025)**,
+  topic, state-specific flag, EN/ES text, true/false form
+  (Balloon Pop), vocabulary flag (Word Forge), figure/clue
+  form (Who Am I?), 65/20-subset flag.
 - **Deck** — named group of cards + count + entitlement.
 - **Chapter** — handbook prose, ordered, + entitlement.
 - **Attempt** — per test/game run; drives every insight
@@ -109,17 +110,28 @@ List continues past capture.
   (starred / wrong / weak).
 - **Annotation** — bookmarks, highlights, key terms.
 - **Entitlement** — free vs premium, per deck and chapter.
-- **Settings** — dark mode, test version, state, language.
+- **Settings** — dark mode, **test version**, state, language.
+- **TestConfig** — bank size, questions asked, correct-to-pass,
+  wrong-to-fail. Three configurations, not a boolean. See
+  `TEST-VERSION.md`.
 
 ## Open questions
 
-1. Header says **2026**, Test Version setting says
-   **2025 Test**. Which governs the question bank?
-   (USCIS has both a 2008 and a 2025 civics test.)
+1. ~~Which test governs?~~ **Decided: 2025.** Their "2026"
+   header is marketing, not a test version. Build 2025
+   first, but carry the version axis in the schema from
+   day one — the 2008 test is still live for anyone who
+   filed N-400 before Oct 20, 2025. See `TEST-VERSION.md`.
 2. Selected State = New York — state-specific answers
    (senators, governor, capital) need a per-state table.
 3. Español toggle — full bilingual bank, or UI only?
 4. Card/chapter/game content does not exist in the
    export. Must be sourced. See `CONTENT-GAP.md`.
 5. Deck/chapter counts are theirs. Ours need not match —
-   card counts are a content decision, not a spec.
+   card counts are a content decision, not a spec. Their
+   "USCIS 2025 Civics" deck says 168; the official bank is
+   128. See `TEST-VERSION.md`.
+6. Their Mock Test is "20 questions" and Interview Survival
+   is "9 wrong / 12 correct" — both match the real 2025
+   rules exactly. Our scoring should read those numbers
+   from TestConfig, not hardcode them.

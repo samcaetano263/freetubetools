@@ -58,15 +58,28 @@ fronts/backs, zero chapter text. Everything was locked
 behind the paywall at capture time. See
 `citizenprep/CONTENT-GAP.md`. Must be sourced from uscis.gov.
 
-Blocking decision: **2008 test or 2025 test?** The app
-displays both years in different places.
+Test version **decided: 2025** — 128 questions, 20 asked,
+12 to pass, 9 wrong to fail. Verified against uscis.gov
+2026-08-20. See `citizenprep/TEST-VERSION.md`.
+
+Important: the 2008 test is still live for anyone who
+filed N-400 before Oct 20, 2025, and there is a third
+config for 65+/20-year residents. Version is a schema
+axis from day one, not a later setting.
+
+uscis.gov is blocked by this environment's egress proxy.
+Search works, fetching does not — the 128-question PDF
+needs another route or a drop into Drive.
 
 ## Next
 
-1. Sam: own repo or this one?
-2. Sam: 2008 or 2025 civics test?
-3. Then: ONE worker builds shared surface (nav, schema,
-   entitlement, settings) against fixture content.
+1. Sam: own repo or this one? Last open decision.
+2. Get the official 128-question bank in (uscis.gov
+   blocked here — Sam drops the PDF in Drive, or a worker
+   fetches it from an unblocked environment).
+3. Then: ONE worker builds shared surface (nav, schema
+   incl. test-version axis, entitlement, settings) against
+   fixture content.
 4. No parallel branches until 3 is merged.
 
 ## Blocked on Drive

@@ -6,7 +6,9 @@ so no study material came across.
 
 ## Missing
 
-- Civics questions and answers — none, for any version
+- Civics questions and answers — none. Need the official
+  128 (2025). The 2008 100-question bank is lower priority
+  but still live for pre-Oct-2025 filers.
 - 1,478 flashcard fronts/backs — referenced by count only
 - Handbook chapter body text — titles only
 - Reading & Writing vocabulary lists
@@ -21,9 +23,14 @@ reading vocabulary, and writing vocabulary are published
 by USCIS and are US government works. The N-400 form is
 also published there.
 
-Decide first (blocks everything): **2008 test or 2025
-test?** They are different question sets. The app shows
-both years in different places — see SPEC.md open Q1.
+Test version is **decided: 2025** (128 questions).
+See `TEST-VERSION.md` for the full rules and the sourcing
+targets.
+
+Import target: the official 128-question PDF from uscis.gov.
+Note that uscis.gov is blocked by this environment's egress
+proxy — a worker will need it fetched some other way, or
+Sam drops the PDF into Drive.
 
 ## Not a blocker for
 
